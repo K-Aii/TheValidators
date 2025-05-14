@@ -10,6 +10,7 @@ public class arrow_waypoints : MonoBehaviour
     void Update()
     {
         Vector3 relativePos = target.position - transform.position;
+        Debug.Log(relativePos);
         Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
         transform.rotation = rotation;
     }

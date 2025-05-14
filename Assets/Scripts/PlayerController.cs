@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour
     public float bulletSpeed;
 
     public float walkSpeed;
+    public float rotateSpeed;
     public bool isTrapped;
+    Rigidbody rb;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
         isTrapped = false;
         GameObject.Find("Buddy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
         sparkAnim = gameObject.GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -41,6 +44,17 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 moveVec = new Vector3(Input.GetAxis("Vertical"), 0, -Input.GetAxis("Horizontal"));
             transform.position += moveVec * walkSpeed * Time.deltaTime;
+            if(Input.GetAxis("Vertical") != 0)
+                transform.rotation = Quaternion.LookRotation(new Vector3(Input.GetAxis("Vertical"), 0, 0));
+            
+            //if (Input.GetAxis("Vertical") < 0 && transform.localScale.z > 0) {
+            //    Vector3 tempScale = transform.localScale;
+            //    tempScale.z *= -1;
+            //    transform.localScale = tempScale;
+            //}
+
+            //rb.MovePosition(rb.position + (transform.forward * Input.GetAxis("Vertical") * walkSpeed * Time.deltaTime));
+            //rb.MoveRotation(rb.rotation * (Quaternion.Euler(0, Input.GetAxis("Horizontal") * rotateSpeed * Time.deltaTime, 0)));
         }
     }
 
