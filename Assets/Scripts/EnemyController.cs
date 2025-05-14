@@ -30,7 +30,7 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.gameObject.tag == "PlayerAttack")
         {
-            hp -= 5;
+            hp -= 3;
             GameObject.Find("Enemy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
             Destroy(collision.gameObject);
         }
