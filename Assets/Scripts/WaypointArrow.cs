@@ -9,10 +9,12 @@ public class arrow_waypoints : MonoBehaviour
 
     LayerMask targetLayer;
     public float visibleDistance;
+    GameObject enemy;
 
     private void Start()
     {
         targetLayer = LayerMask.GetMask("Enemy");
+        enemy = GameObject.Find("Drone_B");
     }
 
     void Update()
@@ -22,10 +24,15 @@ public class arrow_waypoints : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
         transform.rotation = rotation;
 
-        // SHOW ARROW ONLY WHEN ENEMY NOT NEARBY
+        // HIDE ARROW WHEN ENEMY NEARBY AND DEACTIVATED
         if (Physics.CheckSphere(transform.position, visibleDistance, targetLayer))
-            GetComponentInChildren<MeshRenderer>().enabled = false;
+            GetComponentInChildren<MeshRenderer>().enabled = false;     // CLOSE
         else
-            GetComponentInChildren<MeshRenderer>().enabled = true;
+        {
+            if(!enemy.activeSelf)
+                GetComponentInChildren<MeshRenderer>().enabled = false; // DEACTIVATED
+            else
+                GetComponentInChildren<MeshRenderer>().enabled = true;      // FAR
+        }
     }
 }

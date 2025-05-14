@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
             if(Input.GetAxis("Vertical") != 0)
                 transform.rotation = Quaternion.LookRotation(new Vector3(Input.GetAxis("Vertical"), 0, 0));
         }
+
     }
 
     // HP DEDUCTION FROM ENEMY ATTACK
@@ -55,10 +56,17 @@ public class PlayerController : MonoBehaviour
             isTrapped = true;
             damageTimer += Time.deltaTime;
             if (damageTimer > 1) {
-                hp -= 3;
+                hp -= 6;
                 GameObject.Find("Buddy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
                 sparkAnim.SetTrigger("Spark");
                 damageTimer = 0;
+
+                // PLAYER LOSE - OWN HP ZERO
+                if (hp <= 0)
+                {
+                    Time.timeScale = 0;
+                    GameObject.Find("BattleResult").GetComponent<UnityEngine.UI.Text>().text = "LOSE";
+                }
             }
         }
     }

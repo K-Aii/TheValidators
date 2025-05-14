@@ -33,6 +33,12 @@ public class EnemyController : MonoBehaviour
             hp -= 3;
             GameObject.Find("Enemy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
             Destroy(collision.gameObject);
+
+            // PLAYER WIN - ENEMY HP ZERO
+            if (hp <= 0)
+            {
+                this.gameObject.SetActive(false);
+            }
         }
     }
 
