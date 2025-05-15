@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float rotateSpeed;
     public bool isTrapped;
+    Rigidbody rb;
+
+    public string test;
 
     void Start()
     {
@@ -24,6 +27,7 @@ public class PlayerController : MonoBehaviour
         isTrapped = false;
         GameObject.Find("Buddy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
         sparkAnim = gameObject.GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -46,6 +50,46 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(new Vector3(Input.GetAxis("Vertical"), 0, 0));
         }
 
+        if (Input.GetKeyDown(KeyCode.H))
+            Move(test, 1);
+    }
+
+    // PLAYER MOVEMENT
+    public void Move(GameObject target)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, walkSpeed);
+    }
+    public void Move(string direction, int unit)
+    {
+        IEnumerator MoveTimer(Vector3 direction, float _unit)
+        {
+            float i = 0f;
+            while (i < _unit)
+            {
+                i += Time.deltaTime;
+                rb.velocity = direction * walkSpeed;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            rb.velocity = Vector3.zero;
+            yield break;
+        }
+
+        switch (direction) {
+            case "forward":
+                StartCoroutine(MoveTimer(Vector3.right, unit));
+                break;
+            case "back":
+                StartCoroutine(MoveTimer(Vector3.left, unit));
+                break;
+            case "left":
+                StartCoroutine(MoveTimer(Vector3.forward, unit));
+                break;
+            case "right":
+                StartCoroutine(MoveTimer(Vector3.back, unit));
+                break;
+            default:    
+                break;
+        }
     }
 
     // HP DEDUCTION FROM ENEMY ATTACK
