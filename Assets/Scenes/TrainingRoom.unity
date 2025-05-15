@@ -343,7 +343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99.960815, y: -22.065247}
+  m_AnchoredPosition: {x: -109, y: -22.065247}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297361945
@@ -704,7 +704,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v. 7
+  m_Text: v. 8
 --- !u!222 &497780393
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -964,7 +964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee5837b728f44142bd765b6e42cb26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: Move(right,1);Attack();Move(forward,1)
+  test: Move(EnemyFront);Attack(3);
 --- !u!1 &972492611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,7 +1811,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99.960815, y: -22.065247}
+  m_AnchoredPosition: {x: -109, y: -22.065247}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2015672971
