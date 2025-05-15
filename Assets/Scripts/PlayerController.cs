@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public bool isTrapped;
     Rigidbody rb;
 
-    public string test;
+    public float test;
 
     void Start()
     {
@@ -32,8 +32,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(damageTimer);
-
         // PLAYER ATTACK - SHOOTING
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -51,27 +49,46 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.H))
-            Move(test, 1);
+            Move(GameObject.Find("EnemyFront"));
+
     }
 
     // PLAYER MOVEMENT
     public void Move(GameObject target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, walkSpeed);
+        Vector3 targetPos = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+        IEnumerator MoveTo()
+        {           
+            while (Vector3.Distance(targetPos, transform.position) > 0)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, walkSpeed * Time.deltaTime);
+                Vector3 moveDirection = (targetPos - transform.position).normalized;
+                if(moveDirection != Vector3.zero)
+                    transform.rotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0, 0));
+                else
+                    transform.rotation = Quaternion.Euler(0, 90, 0);
+                yield return null;
+            }
+        }
+        if(!isTrapped)
+            StartCoroutine(MoveTo());
     }
     public void Move(string direction, int unit)
     {
         IEnumerator MoveTimer(Vector3 direction, float _unit)
         {
-            float i = 0f;
-            while (i < _unit)
+            if (!isTrapped)
             {
-                i += Time.deltaTime;
-                rb.velocity = direction * walkSpeed;
-                yield return new WaitForSeconds(Time.deltaTime);
+                float i = 0f;
+                while (i < _unit)
+                {
+                    i += Time.deltaTime;
+                    rb.velocity = direction * walkSpeed;
+                    yield return new WaitForSeconds(Time.deltaTime);
+                }
+                rb.velocity = Vector3.zero;
+                yield break;
             }
-            rb.velocity = Vector3.zero;
-            yield break;
         }
 
         switch (direction) {

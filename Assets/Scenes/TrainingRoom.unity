@@ -1851,7 +1851,7 @@ MonoBehaviour:
   walkSpeed: 5
   rotateSpeed: 0
   isTrapped: 0
-  test: 1
+  test: 20
 --- !u!136 &5057969517970477932
 CapsuleCollider:
   m_ObjectHideFlags: 0
