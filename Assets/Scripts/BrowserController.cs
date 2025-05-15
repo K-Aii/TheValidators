@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using UnityEngine.SceneManagement;
 
 public class BrowserController : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class BrowserController : MonoBehaviour
     void ReceiveData(string value)
     {        
         Debug.Log("Received from web app: " + value);
-        value = value.Replace(" ", "");         // DELETE ALL SPACE FROM RECEIVED CODE
+
         string[] commands = value.Split(';') ;
 
         for (int i = 0; i < commands.Length; i++)
@@ -72,6 +73,12 @@ public class BrowserController : MonoBehaviour
                     string target = Regex.Match(methodName, @"[\(](.*?)[\)]").Groups[1].Value;
                     functionQueue.Enqueue(() => pc.Move(GameObject.Find(target))); 
                 }
+            }
+
+            if (methodName.StartsWith("Restart"))
+            {
+                SceneManager.LoadScene("TrainingRoom");
+                Time.timeScale = 1;
             }
         }
         NextAction();

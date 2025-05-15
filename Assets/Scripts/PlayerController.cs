@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
             isTrapped = true;
             damageTimer += Time.deltaTime;
             if (damageTimer > 1) {
-                hp -= 6;
+                hp -= 5;
                 GameObject.Find("Buddy.HP").GetComponent<UnityEngine.UI.Text>().text = hp.ToString();
                 sparkAnim.SetTrigger("Spark");
                 damageTimer = 0;

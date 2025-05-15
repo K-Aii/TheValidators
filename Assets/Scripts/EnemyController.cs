@@ -38,6 +38,8 @@ public class EnemyController : MonoBehaviour
             if (hp <= 0)
             {
                 this.gameObject.SetActive(false);
+                GameObject.Find("BattleResult").GetComponent<UnityEngine.UI.Text>().text = "WIN";
+                GameObject.Find("Gate").GetComponent<SphereCollider>().isTrigger = true;
             }
         }
     }

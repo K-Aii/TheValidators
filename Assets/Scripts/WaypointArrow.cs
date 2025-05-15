@@ -24,15 +24,17 @@ public class arrow_waypoints : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(relativePos, Vector3.up);
         transform.rotation = rotation;
 
-        // HIDE ARROW WHEN ENEMY NEARBY AND DEACTIVATED
+        // HIDE ARROW WHEN ENEMY NEARBY
         if (Physics.CheckSphere(transform.position, visibleDistance, targetLayer))
             GetComponentInChildren<MeshRenderer>().enabled = false;     // CLOSE
         else
-        {
-            if(!enemy.activeSelf)
-                GetComponentInChildren<MeshRenderer>().enabled = false; // DEACTIVATED
-            else
-                GetComponentInChildren<MeshRenderer>().enabled = true;      // FAR
+            GetComponentInChildren<MeshRenderer>().enabled = true;      // FAR
+
+        // POINT TO SUN GATE WHEN ENEMY DEFEATED
+        if (!enemy.activeSelf) {
+            target = GameObject.Find("Gate").transform;
         }
+            
+
     }
 }
