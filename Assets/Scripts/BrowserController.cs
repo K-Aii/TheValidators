@@ -6,7 +6,9 @@ using System.Text.RegularExpressions;
 public class BrowserController : MonoBehaviour
 {
     public string test;
-    
+    PlayerController pc;
+    Queue<System.Action> functionQueue = new Queue<System.Action>();
+
     [System.Obsolete]
     void Start()
     {
@@ -19,6 +21,11 @@ public class BrowserController : MonoBehaviour
 
     }
 
+    private void Awake()
+    {
+        pc = GameObject.Find("Drone_W").GetComponent<PlayerController>();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
@@ -26,7 +33,7 @@ public class BrowserController : MonoBehaviour
     }
 
     void ReceiveData(string value)
-    {
+    {        
         Debug.Log("Received from web app: " + value);
         value = value.Replace(" ", "");         // DELETE ALL SPACE FROM RECEIVED CODE
         string[] commands = value.Split(';') ;
@@ -35,16 +42,15 @@ public class BrowserController : MonoBehaviour
         {
             string methodName = commands[i];
             Debug.Log("Calling method: " + methodName);
-            //GameObject.Find("Drone_W").GetComponent<PlayerController>().Invoke(methodName, 0);
 
             if (methodName.StartsWith("Attack"))
             {
                 if (methodName.Length > 8)   // INCLUDES PARAMETERS
                 {
                     int duration = int.Parse(Regex.Match(methodName, @"\d+").Value);    // EXTRACT NUMBERS FROM STRING
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Attack(duration);
+                    functionQueue.Enqueue(() => pc.Attack(duration)); 
                 }else
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Attack();
+                    functionQueue.Enqueue(() => pc.Attack());
             }
 
             if (methodName.StartsWith("Move")) 
@@ -54,22 +60,35 @@ public class BrowserController : MonoBehaviour
                     unit = int.Parse(Regex.Match(methodName, @"\d+").Value);    // EXTRACT NUMBERS FROM STRING
 
                 if (methodName.Contains("forward"))
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("forward", unit);
+                    functionQueue.Enqueue(() => pc.Move("forward", unit)); 
                 else if (methodName.Contains("back"))
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("back", unit);
+                    functionQueue.Enqueue(() => pc.Move("back", unit));
                 else if (methodName.Contains("left"))
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("left", unit);
+                    functionQueue.Enqueue(() => pc.Move("left", unit));
                 else if (methodName.Contains("right"))
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("right", unit);
-                else {
+                    functionQueue.Enqueue(() => pc.Move("right", unit));
+                else
+                {
                     string target = Regex.Match(methodName, @"[\(](.*?)[\)]").Groups[1].Value;
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Move(GameObject.Find(target));
+                    functionQueue.Enqueue(() => pc.Move(GameObject.Find(target))); 
                 }
-
-
-
             }
+        }
+        StartCoroutine(nextAction());
+             
+        
+    }
+    IEnumerator nextAction()
+    {
+        while (pc.isMoving)
+            yield return null;
+
+        if (functionQueue.Count > 0)
+        {
+            System.Action nextFunction = functionQueue.Dequeue();
+            nextFunction.Invoke();
         }
 
     }
+    
 }

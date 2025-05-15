@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float rotateSpeed;
     public bool isTrapped;
+    public bool isMoving;
     Rigidbody rb;
 
     public int test;
@@ -87,18 +88,22 @@ public class PlayerController : MonoBehaviour
     }
     public void Move(string direction, int unit)
     {
+        Debug.Log(direction);
         IEnumerator MoveTimer(Vector3 direction, float _unit)
         {
             if (!isTrapped)
             {
+                isMoving = true;
                 float i = 0f;
                 while (i < _unit)
                 {
                     i += Time.deltaTime;
                     rb.velocity = direction * walkSpeed;
+                    Debug.Log(direction+ "AAAAAAAAAAAAAAAAAAAA");
                     yield return new WaitForSeconds(Time.deltaTime);
                 }
                 rb.velocity = Vector3.zero;
+                isMoving = false;
                 yield break;
             }
         }
