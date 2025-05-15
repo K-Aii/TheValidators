@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public bool isTrapped;
     Rigidbody rb;
 
-    public float test;
+    public int test;
 
     void Start()
     {
@@ -32,11 +32,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // PLAYER ATTACK - SHOOTING
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var bullet = Instantiate(bulletGO, shootingPoint.position, bulletGO.transform.rotation);
-            bullet.GetComponent<Rigidbody>().velocity = shootingPoint.forward * bulletSpeed;
+            Attack(test);
         }
 
         // PLAYER MOVEMENT
@@ -49,8 +47,22 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.H))
+            //Move(test, 1);
             Move(GameObject.Find("EnemyFront"));
 
+    }
+
+    // PLAYER ATTACK - SHOOTING
+    public void Attack(int duration = 1) {
+        IEnumerator AttackTimer() {
+            for (int i = 0; i < duration; i++) { 
+                var bullet = Instantiate(bulletGO, shootingPoint.position, bulletGO.transform.rotation);
+                bullet.GetComponent<Rigidbody>().velocity = shootingPoint.forward * bulletSpeed;
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+        StartCoroutine(AttackTimer());
+        
     }
 
     // PLAYER MOVEMENT
@@ -93,9 +105,11 @@ public class PlayerController : MonoBehaviour
 
         switch (direction) {
             case "forward":
+                transform.rotation = Quaternion.Euler(0, 90, 0);
                 StartCoroutine(MoveTimer(Vector3.right, unit));
                 break;
             case "back":
+                transform.rotation = Quaternion.Euler(0, -90, 0);
                 StartCoroutine(MoveTimer(Vector3.left, unit));
                 break;
             case "left":
