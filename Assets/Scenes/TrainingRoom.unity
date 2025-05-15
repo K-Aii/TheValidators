@@ -704,7 +704,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v. 6
+  m_Text: v. 7
 --- !u!222 &497780393
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2169,7 +2169,7 @@ MonoBehaviour:
   - {fileID: 1560461612}
   - {fileID: 1117455212}
   - {fileID: 660571317}
-  damageZone: {fileID: 3741016959697826547, guid: 4ce334c2e6282d14bbd8e405439bc7d2, type: 3}
+  damageZone: {fileID: 3741016959697826547, guid: ad1644ad3962ed8489f85b9aca30163d, type: 3}
 --- !u!65 &9117754360498465740
 BoxCollider:
   m_ObjectHideFlags: 0

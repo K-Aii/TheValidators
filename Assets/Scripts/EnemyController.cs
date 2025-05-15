@@ -50,8 +50,7 @@ public class EnemyController : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             teleportTimer += Time.deltaTime;
-            //Debug.Log(teleportTimer);
-            if (teleportTimer > 2) 
+            if (teleportTimer > 3) 
             {
                 // ATTACK - SPAWN IF NOT EXIST
                 Vector3 zonePos = new Vector3(transform.position.x, 0.5f, transform.position.z);
