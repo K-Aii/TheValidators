@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float rotateSpeed;
     public bool isTrapped;
-    public bool isMoving;
     Rigidbody rb;
 
     public int test;
@@ -61,6 +60,7 @@ public class PlayerController : MonoBehaviour
                 bullet.GetComponent<Rigidbody>().velocity = shootingPoint.forward * bulletSpeed;
                 yield return new WaitForSeconds(0.2f);
             }
+            GameObject.Find("BrowserController").GetComponent<BrowserController>().NextAction();
         }
         StartCoroutine(AttackTimer());
         
@@ -82,6 +82,7 @@ public class PlayerController : MonoBehaviour
                     transform.rotation = Quaternion.Euler(0, 90, 0);
                 yield return null;
             }
+            GameObject.Find("BrowserController").GetComponent<BrowserController>().NextAction();
         }
         if(!isTrapped)
             StartCoroutine(MoveTo());
@@ -93,17 +94,15 @@ public class PlayerController : MonoBehaviour
         {
             if (!isTrapped)
             {
-                isMoving = true;
                 float i = 0f;
                 while (i < _unit)
                 {
                     i += Time.deltaTime;
                     rb.velocity = direction * walkSpeed;
-                    Debug.Log(direction+ "AAAAAAAAAAAAAAAAAAAA");
                     yield return new WaitForSeconds(Time.deltaTime);
                 }
                 rb.velocity = Vector3.zero;
-                isMoving = false;
+                GameObject.Find("BrowserController").GetComponent<BrowserController>().NextAction();
                 yield break;
             }
         }

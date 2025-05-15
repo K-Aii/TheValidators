@@ -7,7 +7,7 @@ public class BrowserController : MonoBehaviour
 {
     public string test;
     PlayerController pc;
-    Queue<System.Action> functionQueue = new Queue<System.Action>();
+    public Queue<System.Action> functionQueue = new Queue<System.Action>();
 
     [System.Obsolete]
     void Start()
@@ -41,7 +41,7 @@ public class BrowserController : MonoBehaviour
         for (int i = 0; i < commands.Length; i++)
         {
             string methodName = commands[i];
-            Debug.Log("Calling method: " + methodName);
+            Debug.Log("Adding method to queue: " + methodName);
 
             if (methodName.StartsWith("Attack"))
             {
@@ -74,15 +74,13 @@ public class BrowserController : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(nextAction());
+        NextAction();
              
         
     }
-    IEnumerator nextAction()
+    public void NextAction()
     {
-        while (pc.isMoving)
-            yield return null;
-
+        
         if (functionQueue.Count > 0)
         {
             System.Action nextFunction = functionQueue.Dequeue();
