@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 public class BrowserController : MonoBehaviour
 {
+    public string test;
+    
     [System.Obsolete]
     void Start()
     {
@@ -16,6 +18,13 @@ public class BrowserController : MonoBehaviour
         });");
 
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+            ReceiveData(test);
+    }
+
     void ReceiveData(string value)
     {
         Debug.Log("Received from web app: " + value);
@@ -30,18 +39,19 @@ public class BrowserController : MonoBehaviour
 
             if (methodName.StartsWith("Attack"))
             {
-                if (methodName.Length > 9)   // INCLUDES PARAMETERS
+                if (methodName.Length > 8)   // INCLUDES PARAMETERS
                 {
                     int duration = int.Parse(Regex.Match(methodName, @"\d+").Value);    // EXTRACT NUMBERS FROM STRING
                     GameObject.Find("Drone_W").GetComponent<PlayerController>().Attack(duration);
                 }else
-                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Invoke("Attack", 0);
+                    GameObject.Find("Drone_W").GetComponent<PlayerController>().Attack();
             }
 
             if (methodName.StartsWith("Move")) 
             {
-                // Move(foward, 1) / Move(enemyName)
-                int unit = int.Parse(Regex.Match(methodName, @"\d+").Value);    // EXTRACT NUMBERS FROM STRING
+                int unit = 0;
+                if (Regex.IsMatch(methodName, @"\d+"))
+                    unit = int.Parse(Regex.Match(methodName, @"\d+").Value);    // EXTRACT NUMBERS FROM STRING
 
                 if (methodName.Contains("forward"))
                     GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("forward", unit);
@@ -52,7 +62,7 @@ public class BrowserController : MonoBehaviour
                 else if (methodName.Contains("right"))
                     GameObject.Find("Drone_W").GetComponent<PlayerController>().Move("right", unit);
                 else {
-                    string target = Regex.Match(methodName, @"\(([^)]*)\)").Value;
+                    string target = Regex.Match(methodName, @"[\(](.*?)[\)]").Groups[1].Value;
                     GameObject.Find("Drone_W").GetComponent<PlayerController>().Move(GameObject.Find(target));
                 }
 

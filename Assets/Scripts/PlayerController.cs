@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Attack(test);
+            Attack();
         }
 
         // PLAYER MOVEMENT
